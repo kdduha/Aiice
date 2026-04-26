@@ -6,7 +6,6 @@ import yaml
 
 METRIC_BETTER = {
     "mae": "min",
-    "mse": "min",
     "rmse": "min",
     "psnr": "max",
     "ssim": "max",
@@ -55,68 +54,6 @@ def append_to_csv(csv_path, model, sea, rows):
     df.to_csv(csv_path, index=False)
 
 
-def build_bold_pivot(df: pd.DataFrame):
-    pivot = (
-        df.pivot_table(index=["sea", "metric"], columns="model", values="value")
-        .sort_index()
-        .astype(object)
-    )
-
-    for (sea, metric), row in pivot.iterrows():
-        mode = METRIC_BETTER.get(metric, "max")
-
-        values = row.astype(float)
-        valid = values.notna()
-
-        if not valid.any():
-            continue
-
-        best = values[valid].max() if mode == "max" else values[valid].min()
-
-        for col in pivot.columns:
-            val = values[col]
-
-            if valid[col] and val == best:
-                pivot.loc[(sea, metric), col] = f"<b>{val:.6f}</b>"
-            else:
-                pivot.loc[(sea, metric), col] = f"{val:.6f}" if valid[col] else ""
-
-    return pivot
-
-
-def save_html(df: pd.DataFrame, html_path: str):
-    pivot = build_bold_pivot(df)
-
-    pivot.columns.name = None
-    pivot.index.names = [None, None]
-
-    html = pivot.to_html(escape=False)
-
-    with open(html_path, "w") as f:
-        f.write(html)
-
-    return html
-
-
-def inject_into_readme(readme_path: str, html: str):
-    with open(readme_path, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    start = "<!-- benchmark -->"
-    end = "<!-- benchmark -->"
-
-    if start not in content or end not in content:
-        raise ValueError("README must contain <!-- benchmark --> markers")
-
-    before = content.split(start)[0]
-    after = content.split(end)[-1]
-
-    new_content = before + start + "\n" + html + "\n" + end + after
-
-    with open(readme_path, "w", encoding="utf-8") as f:
-        f.write(new_content)
-
-
 def main():
     parser = argparse.ArgumentParser()
 
@@ -124,8 +61,6 @@ def main():
     parser.add_argument("--sea", required=True)
     parser.add_argument("--report", required=True)
     parser.add_argument("--csv", required=True)
-    parser.add_argument("--html", required=True)
-    parser.add_argument("--readme", required=True)
 
     args = parser.parse_args()
 
@@ -133,13 +68,7 @@ def main():
     rows = extract_mean_metrics(report)
     append_to_csv(args.csv, args.model, args.sea, rows)
 
-    df = pd.read_csv(args.csv)
-
-    html = save_html(df, args.html)
-    inject_into_readme(args.readme, html)
-
     print(f"- updated CSV: {args.csv}")
-    print(f"- generated HTML: {args.html}")
 
 
 if __name__ == "__main__":

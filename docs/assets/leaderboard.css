@@ -1,0 +1,46 @@
+#leaderboard-app {
+  font-family: var(--md-text-font);
+  color: var(--md-default-fg-color);
+}
+
+.lb-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.lb-controls select {
+  font-family: var(--md-text-font);
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  border: 1px solid var(--md-default-fg-color--light);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.big {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+table {
+  width: 100%;
+}
+
+.best {
+  font-weight: 600;
+}

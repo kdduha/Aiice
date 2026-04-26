@@ -28,6 +28,8 @@ dev = [
     "pdoc>=16.0.0",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
+    "mkdocstrings[python]>=0.29",
+    "mkdocs-autorefs>=1.2",
 ]
 scripts = [
     "pandas>=2.3.3",
