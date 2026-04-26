@@ -22,15 +22,13 @@ After an experiment is completed, you can add its results for a specific sea to 
 uv run scripts/experiments/convert.py \
     --model baseline_mean \
     --sea "Kara Sea" \
+    --forecast_len 54 \
+    --step 1w \
     --report "outputs/baseline_mean/Kara Sea/report.yaml" \
-    --csv .doc/leaderboard/table.csv \
-    --html .doc/leaderboard/leaderboard.html \
-    --readme README.md
+    --csv docs/assets/leaderboard.csv
 ```
 
 This command:
 
 * extracts metrics from the YAML report
 * updates the central CSV leaderboard
-* regenerates the HTML leaderboard for visualization
-* inject the HTML leaderboard to the main README.md
