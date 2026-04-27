@@ -1,4 +1,4 @@
-output_path: ./outputs
+output_path: ./outputs/prehistory104-forecast52-step1w
 device: "mps"
 
 aiice:
@@ -7,7 +7,7 @@ aiice:
   end_date: "2020-01-01"
   pre_history_len: 104
   forecast_len: 52
-  step: 7
+  step: 1w
   batch_size: 256
 
 run:
