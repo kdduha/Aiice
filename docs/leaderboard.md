@@ -1,5 +1,5 @@
 The leaderboard compares model performance on the AIICE evaluation dataset across multiple metrics and sea regions.
-You can explore model configurations in [examples](https://github.com/ITMO-NSS-team/Aiice/tree/main/scripts/experiments).
+You can explore model configurations in [examples](https://anonymous.4open.science/r/Aiice-0BF8/Aiice/tree/main/scripts/experiments).
 
 ![Benchmark coverage](media/map.png){ width=600, style="display:block;margin:0 auto;" }
 
@@ -15,6 +15,6 @@ The full benchmark covers the entire Arctic Ocean basin shown below. For the lea
 All metric definitions and formulas are on the [Metrics reference](api/metrics.md) page.
 
 !!! note
-    To add your model to the leaderboard, follow the [leaderboard instruction](https://github.com/ITMO-NSS-team/Aiice/tree/main/scripts/experiments/README.md) and the [Contributing guide](contributing.md).
+    To add your model to the leaderboard, follow the [leaderboard instruction](https://anonymous.4open.science/r/Aiice-0BF8/Aiice/tree/main/scripts/experiments/README.md) and the [Contributing guide](contributing.md).
 
 <div id="leaderboard-app"></div>

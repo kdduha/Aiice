@@ -1,7 +1,7 @@
 site_name: AIICE Benchmark
 site_description: A standardized benchmark for spatio-temporal forecasting of Arctic sea ice concentration
-site_url: https://itmo-nss-team.github.io/Aiice/
-repo_url: https://github.com/ITMO-NSS-team/Aiice
+site_url: https://prismatic-baklava-6691d5.netlify.app/Aiice/
+repo_url: https://anonymous.4open.science/r/Aiice-0BF8/Aiice
 repo_name: ITMO-NSS-team/Aiice
 edit_uri: ""
 
