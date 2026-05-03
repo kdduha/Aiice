@@ -6,28 +6,7 @@ permissions:
   contents: write
 
 jobs:
-
-  anonymize:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install uv & Python
-        uses: astral-sh/setup-uv@v7
-        with:
-          version: 0.9.21
-          python-version: "3.11"
-          enable-cache: true
-
-      - name: Run anonymization script
-        run: uv run python .github/scripts/anonymize.py .
-
-      - name: Remove anonymization script from the anon branch
-        run: rm -f .github/scripts/anonymize.py
-
   deploy-netlify:
-    needs: anonymize
     runs-on: ubuntu-latest
     environment:
       name: netlify
@@ -43,6 +22,9 @@ jobs:
           version: 0.9.21
           python-version: "3.11"
           enable-cache: true
+
+      - name: Run anonymization script
+        run: uv run python .github/scripts/anonymize.py .
 
       - name: Build anon docs
         run: uv run mkdocs build --site-dir site
