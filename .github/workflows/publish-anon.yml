@@ -7,20 +7,11 @@ permissions:
 
 jobs:
 
-  push-anon-branch:
+  anonymize:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout full history
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure git
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Install uv & Python
         uses: astral-sh/setup-uv@v7
@@ -35,15 +26,8 @@ jobs:
       - name: Remove anonymization script from the anon branch
         run: rm -f .github/scripts/anonymize.py
 
-      - name: Push to anonymize-release branch
-        run: |
-          git checkout -B anonymize-release
-          git add -A
-          git commit -m "chore: anonymized release for ${{ github.ref_name }}"
-          git push origin anonymize-release --force
-
   deploy-netlify:
-    needs: push-anon-branch
+    needs: anonymize
     runs-on: ubuntu-latest
     environment:
       name: netlify
