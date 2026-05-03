@@ -8,8 +8,6 @@ permissions:
 jobs:
   deploy-netlify:
     runs-on: ubuntu-latest
-    environment:
-      name: netlify
     steps:
       - name: Checkout
         uses: actions/checkout@v4
