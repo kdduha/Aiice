@@ -1,0 +1,75 @@
+name: Anonymize & Publish doc
+
+on:
+  push:
+    tags:
+      # Publish on any tag starting with a `v`, e.g., v0.1.0
+      - v*
+
+permissions:
+  contents: write
+
+jobs:
+
+  push-anon-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install uv & Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: 0.9.21
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Run anonymization script
+        run: uv run python .github/scripts/anonymize.py .
+
+      - name: Remove anonymization script from the anon branch
+        run: rm -f .github/scripts/anonymize.py
+
+      - name: Push to anonymize-release branch
+        run: |
+          git checkout -B anonymize-release
+          git add -A
+          git commit -m "chore: anonymized release for ${{ github.ref_name }}"
+          git push origin anonymize-release --force
+
+  deploy-netlify:
+    needs: push-anon-branch
+    runs-on: ubuntu-latest
+    environment:
+      name: netlify
+    steps:
+      - name: Checkout anonymize-release branch
+        uses: actions/checkout@v4
+        with:
+          ref: anonymize-release
+
+      - name: Install uv & Python
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: 0.9.21
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Build anon docs
+        run: uv run mkdocs build --site-dir site
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: site/
+          production-deploy: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_ANON_SITE_ID }}
