@@ -54,6 +54,7 @@ def init_train(
         sea=sea,
         step=cfg.step,
         tensor_out=True,
+        threads=cfg.threads,
     )
     train_dataset = SlidingWindowDataset(
         data=train_data,

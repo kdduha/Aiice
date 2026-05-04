@@ -148,6 +148,13 @@ def train(
             logger.warning("EARLY STOPPING TRIGGERED")
             break
 
+        if epoch + 1 >= args["initial_patience"] and not loss < args["target_loss"]:
+            logger.warning(
+                f"EARLY ABORT: loss did not go below {args['target_loss']} "
+                f"in first {args['initial_patience']} epochs"
+            )
+            break
+        
     logger.info("- End of training")
 
     torch.save(model.state_dict(), f"{experiment_path}/model.pt")

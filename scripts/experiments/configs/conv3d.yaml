@@ -8,6 +8,7 @@ aiice:
   forecast_len: 52
   step: 7
   batch_size: 128
+  threads: 4
 
 run:
   model_name: conv3d
