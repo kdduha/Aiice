@@ -128,6 +128,7 @@ def main():
                     logger=logger,
                     cfg=cfg,
                     sea=sea,
+                )
             case "unet":
                 train_dataloader = init_train(
                     cfg.aiice,
