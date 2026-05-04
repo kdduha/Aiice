@@ -1507,7 +1507,7 @@ fno,Chukchi Sea,ssim,0.9024111428260804,7,1d
 fno,Chukchi Sea,iou,0.8887748517990113,7,1d
 fno,Sea of Japan,mae,0.0029978908369084,7,1d
 fno,Sea of Japan,rmse,0.0181386591279879,7,1d
-fno,Sea of Japan,psnr,-inf,7,1d
+fno,Sea of Japan,psnr,31.204751,7,1d
 fno,Sea of Japan,bin_accuracy,0.9951300630569458,7,1d
 fno,Sea of Japan,ssim,0.9696018447875976,7,1d
 fno,Sea of Japan,iou,0.453151181936264,7,1d
@@ -1645,7 +1645,7 @@ fno,Laptev Sea,ssim,0.9612990498542786,7,1d
 fno,Laptev Sea,iou,0.938726734638214,7,1d
 fno,Sea of Japan,mae,0.0042971911076771,30,1d
 fno,Sea of Japan,rmse,0.025847614900825,30,1d
-fno,Sea of Japan,psnr,-inf,30,1d
+fno,Sea of Japan,psnr,28.417693,30,1d
 fno,Sea of Japan,bin_accuracy,0.9928558136026064,30,1d
 fno,Sea of Japan,ssim,0.9596355900168418,30,1d
 fno,Sea of Japan,iou,0.3624098243502279,30,1d
