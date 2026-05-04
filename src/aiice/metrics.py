@@ -1,3 +1,4 @@
+import math
 from collections.abc import Callable, Sequence
 from typing import Sequence
 
@@ -72,6 +73,12 @@ def psnr(y_true: Sequence, y_pred: Sequence) -> float:
     mse_val = torch.mean((y_true - y_pred) ** 2)
     if mse_val == 0:
         return float("inf")
+
+    # MAX = 0 means the ground truth field is entirely ice-free.
+    # PSNR is undefined in this case — return nan so the Evaluator
+    # can exclude this sample from aggregation rather than corrupting the mean.
+    if torch.max(y_true) == 0:
+        return float("nan")
 
     max_val = torch.max(y_true)
     return (20 * torch.log10(max_val) - 10 * torch.log10(mse_val)).item()
@@ -235,15 +242,24 @@ class Evaluator:
             if not values:
                 continue
 
-            if detailed:
-                summary[name] = {
-                    MEAN_STAT: sum(values) / len(values),
-                    LAST_STAT: values[-1],
-                    COUNT_STAT: len(values),
-                    MIN_STAT: min(values),
-                    MAX_STAT: max(values),
-                }
-            else:
-                summary[name] = sum(values) / len(values)
+        if detailed:
+            # Filter out nan and inf before aggregation — these indicate samples
+            # where the metric is undefined (e.g. PSNR on an all-zero ground truth).
+            # Raw values are still preserved in _report for debugging.
+            clean = [v for v in values if not math.isnan(v) and not math.isinf(v)]
+
+            summary[name] = {
+                MEAN_STAT: sum(clean) / len(clean) if clean else float("nan"),
+                LAST_STAT: values[-1],
+                # COUNT_STAT reflects total samples evaluated, including skipped ones,
+                # so you can detect how many were undefined (len(values) - len(clean))
+                COUNT_STAT: len(values),
+                MIN_STAT: min(clean) if clean else float("nan"),
+                MAX_STAT: max(clean) if clean else float("nan"),
+            }
+        else:
+            # Same filtering for the simple mean-only path
+            clean = [v for v in values if not math.isnan(v) and not math.isinf(v)]
+            summary[name] = sum(clean) / len(clean) if clean else float("nan")
 
         return summary
