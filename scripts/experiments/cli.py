@@ -54,6 +54,7 @@ def init_train(
         sea=sea,
         step=cfg.step,
         tensor_out=True,
+        threads=cfg.threads,
     )
     train_dataset = SlidingWindowDataset(
         data=train_data,
@@ -127,6 +128,7 @@ def main():
                     logger=logger,
                     cfg=cfg,
                     sea=sea,
+                )
             case "unet":
                 train_dataloader = init_train(
                     cfg.aiice,
